@@ -1,0 +1,31 @@
+# VERSION: "3.9"
+
+services:
+  redis_cache:
+    image: "redis:alpine"
+    container_name: redis_cache
+    restart: always
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_USER=docker
+      - REDIS_PASSWORD=cache
+      - REDIS_DB=redis_cache
+
+  database_cache:
+    image: postgres
+    container_name: database_cache
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=cache
+      - POSTGRES_DB=cache_test
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata:
+    driver: local
